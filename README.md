@@ -6,7 +6,7 @@ Surveillance de présence secteur sur les alimentations type SLAT Eurak Titan
 3 GPIO sont nécessaires pour assurer le bon fonctionnement du montage:
   - `GPIO_EDF` => Présence secteur. Relier sur le contact NO présence secteur (pins `1` et `2` sur le port DB15 pour des Eurak Titan).
   - `GPIO_ALIM` => Présence alimentation, utilisé pour détecter l'arrachement/coupure du cable de supervision. Relier sur un contact NO fonctionnement redresseur (pins `4` et `5` sur le port DB15 pour des Eurak Titan).
-  - `GPIO_LOOP` => Présence accessoire. Si votre accessoire n'est pas solidaire du système supervisant, forcer cette GPIO à la masse. Etat logique inversé.
+  - `GPIO_LOOP` => Présence accessoire. Si votre accessoire n'est pas solidaire du système supervisant, forcer cette GPIO à la masse sur votre accessoire. Etat logique inversé.
 
 > [!NOTE]
 > TODO: Schéma de câblage
