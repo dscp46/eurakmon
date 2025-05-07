@@ -8,7 +8,7 @@ Script de surveillance de l'alimentation secteur sur les alimentations type SLAT
 ## Table d'états
 
 | Etat | Sévérité Alarme | Icone APRS |
-| --- | --- | --- |
+| --- | :---: | :---: |
 | Sur secteur | *Effacée* | ![Aprs Icon PW](pic/aprs-ok.png) |
 | Sur batterie | Mineure | ![Aprs Icon P0](pic/aprs-bat.png) |
 | Liaison de supervision KO | Majeure | ![Aprs Icon Pn](pic/aprs-maj.png) |
