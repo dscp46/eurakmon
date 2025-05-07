@@ -24,7 +24,7 @@ Surveillance de présence secteur sur les alimentations type SLAT Eurak Titan
 ## Installation
 
 ```bash
-apt install -y gpiod
+apt install -y git gpiod netcat-traditional
 git clone "https://github.com/dscp46/eurakmon"
 cd eurakmon
 ```
