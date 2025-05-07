@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+######### Settings #########
+PIN_LOOP=13
+PIN_EDF=5
+PIN_ALIM=6
+GPIOCHIP=/dev/gpiochip0
+
+QRZ=N0CALL
+PASSCODE=-1
+LAT="3500.66N"
+LON="00412.62E"
+
+SERVER=euro.aprs2.net
+COMMENT_ON_MAINS="EDF OK, EurakMon"
+COMMENT_ON_BATT="EDF KO, sur batterie, EurakMon"
+COMMENT_COMM_KO="Alim ???, comm alim KO, EurakMon"
+COMMENT_COMM_KO_PI="Nappe GPIO absente, EurakMon"
+############################
+
+STAT_LOOP=$(gpioget ${GPIOCHIP} ${PIN_LOOP})
+STAT_EDF=$(gpioget ${GPIOCHIP} ${PIN_EDF})
+STAT_ALIM=$(gpioget ${GPIOCHIP} ${PIN_ALIM})
+TSTAMP=";$(printf "%-09s" "${QRZ}")*$(date -u +%d%H%M)z"
+if [[ "${STAT_LOOP}" == "0" ]]; then
+	if [[ "${STAT_ALIM}" == "1" ]]; then
+		# Cable connected
+		if [[ "${STAT_EDF}" == "1" ]]; then
+			# Mains present
+			FRAME_TX="${TSTAMP}${LAT}P${LON}W${COMMENT_ON_MAINS}"
+		else
+			# No Mains
+			FRAME_TX="${TSTAMP}${LAT}P${LON}0${COMMENT_ON_BATT}"
+		fi
+	else
+		# Cable disconnected
+		FRAME_TX="${TSTAMP}${LAT}P${LON}n${COMMENT_COMM_KO}"
+	fi
+else
+	# Cable disconnected, pi side
+	FRAME_TX="${TSTAMP}${LAT}P${LON}n${COMMENT_COMM_KO_PI}"
+fi
+
+APRSIS_LOGINLINE="user ${QRZ} pass ${PASSCODE} vers Powermon 1.0"
+AUTH_CRED=$(echo -ne "${APRS_LOGINLINE}" | base64)
+
+REQ_BODY="${QRZ}>APEKM1,TCPIP*:${FRAME_TX}"
+
+{
+	echo -ne "${APRSIS_LOGINLINE}\r\n"
+	sleep 1
+	echo -ne "${REQ_BODY}\r\n"
+	sleep 1
+} | nc -N "${SERVER}" 14580 > /dev/null
