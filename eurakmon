@@ -41,8 +41,6 @@ else
 fi
 
 APRSIS_LOGINLINE="user ${QRZ} pass ${PASSCODE} vers Powermon 1.0"
-AUTH_CRED=$(echo -ne "${APRS_LOGINLINE}" | base64)
-
 REQ_BODY="${QRZ}>APEKM1,TCPIP*:${FRAME_TX}"
 
 {
